@@ -10,7 +10,7 @@ https://user-images.githubusercontent.com/97980444/164317160-3aa4f9b2-c125-40e7-
 )
 -->
 <p align='center'>
-    <img src="/LeGO-LOAM/launch/demo32x.mp4" alt="drawing" width="800"/>
+    <img src="/LeGO-LOAM/launch/demo32x.gif" alt="drawing" width="800"/>
 </p>
 
 ## Lidar-inertial Odometry
