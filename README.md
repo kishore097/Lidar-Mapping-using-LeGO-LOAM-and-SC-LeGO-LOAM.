@@ -21,12 +21,25 @@ https://user-images.githubusercontent.com/97980444/164317160-3aa4f9b2-c125-40e7-
 - [ROS](http://wiki.ros.org/ROS/Installation) (tested with noetic)
 - [gtsam](https://github.com/borglab/gtsam/releases) (Georgia Tech Smoothing and Mapping library, 4.0.0-alpha2)
   ```
-  wget -O ~/Downloads/gtsam.zip https://github.com/borglab/gtsam/archive/4.0.0-alpha2.zip
-  cd ~/Downloads/ && unzip gtsam.zip -d ~/Downloads/
-  cd ~/Downloads/gtsam-4.0.0-alpha2/
-  mkdir build && cd build
-  cmake ..
-  sudo make install
+    $ mkdir build
+    $ cd build
+    $ cmake ..
+    $ make check (optional, runs unit tests)
+    $ make install
+    
+# Prerequisites:
+    Boost >= 1.43 (Ubuntu: sudo apt-get install libboost-all-dev)
+    CMake >= 3.0 (Ubuntu: sudo apt-get install cmake)
+    # Add PPA
+    sudo add-apt-repository ppa:borglab/gtsam-develop
+    sudo apt update  # not necessary since Bionic
+# Install:
+    sudo apt install libgtsam-dev libgtsam-unstable-dev
+# Add PPA
+    sudo add-apt-repository ppa:borglab/gtsam-release-4.0
+    sudo apt update  # not necessary since Bionic
+# Install:
+    sudo apt install libgtsam-dev libgtsam-unstable-dev
   ```
 
 ## Compile
@@ -46,7 +59,7 @@ When you compile the code for the first time, you need to add "-j1" behind "catk
 LeGO-LOAM is speficifally optimized for a horizontally placed VLP-16 on a ground vehicle. It assumes there is always a ground plane in the scan. The UGV we are using is Clearpath Jackal. It has a built-in IMU. 
 
 <p align='center'>
-    <img src="/LeGO-LOAM/launch/jackal-label.jpg" alt="drawing" width="400"/>
+    <img src="/LeGO-LOAM/launch/nuance.jpg" alt="drawing" width="400"/>
 </p>
 
 The package performs segmentation before feature extraction.
@@ -107,7 +120,7 @@ Notes: Though /imu/data is optinal, it can improve estimation accuracy greatly i
 
 ## New data-set
 
-This dataset, [Stevens data-set](https://github.com/TixiaoShan/Stevens-VLP16-Dataset), is captured using a Velodyne VLP-16, which is mounted on an UGV - Clearpath Jackal, on Stevens Institute of Technology campus. The VLP-16 rotation rate is set to 10Hz. This data-set features over 20K scans and many loop-closures. 
+This dataset, [Custsom Northeastern Campus](), is captured using a Velodyne VLP-16, which is mounted on an UGV - Clearpath Jackal, on Stevens Institute of Technology campus. The VLP-16 rotation rate is set to 10Hz. This data-set features over 20K scans and many loop-closures. 
 
 <p align='center'>
     <img src="/LeGO-LOAM/launch/dataset-demo.gif" alt="drawing" width="600"/>
