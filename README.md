@@ -3,7 +3,7 @@
 
 This repository contains code for a lightweight and ground optimized lidar odometry and mapping (LeGO-LOAM) and Scan context LeGO-LOAM system. The system takes in point cloud  from a Velodyne VLP-16 Lidar (palced horizontally) and optional IMU data as inputs. It outputs 6D pose estimation in real-time. 
 <!--
-[![Watch the video](/LeGO-LOAM/launch/demo.gif)](
+[![Watch the video](/LeGO-LOAM/launch/demo32x.mp4)](
 
 https://user-images.githubusercontent.com/97980444/164317160-3aa4f9b2-c125-40e7-8017-ca20d84800e4.mp4
 
