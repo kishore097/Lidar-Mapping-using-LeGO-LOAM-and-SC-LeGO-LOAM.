@@ -40,7 +40,7 @@ https://user-images.githubusercontent.com/97980444/164317160-3aa4f9b2-c125-40e7-
     sudo apt update  # not necessary since Bionic
 # Install:
     sudo apt install libgtsam-dev libgtsam-unstable-dev
-  ```
+  
 
 ## Compile
 
@@ -87,18 +87,8 @@ extern const float ang_bottom = 15.0;
 extern const int groundScanInd = 7;
 ```
 
-Another example for Velodyne HDL-32e range image projection:
 
-```
-extern const int N_SCAN = 32;
-extern const int Horizon_SCAN = 1800;
-extern const float ang_res_x = 360.0/Horizon_SCAN;
-extern const float ang_res_y = 41.333/float(N_Scan-1);
-extern const float ang_bottom = 30.666666;
-extern const int groundScanInd = 20;
-```
-
-**New**: a new **useCloudRing** flag has been added to help with point cloud projection (i.e., VLP-32C, VLS-128). Velodyne point cloud has "ring" channel that directly gives the point row id in a range image. Other lidars may have a same type of channel, i.e., "r" in Ouster. If you are using a non-Velodyne lidar but it has a similar "ring" channel, you can change the PointXYZIR definition in utility.h and the corresponding code in imageProjection.cpp.
+**New**: The existing LeGO-LOAM algorithm is tested on  a new **useCloudRing** flag has been added to help with point cloud projection (i.e., VLP-32C, VLS-128). Velodyne point cloud has "ring" channel that directly gives the point row id in a range image. Other lidars may have a same type of channel, i.e., "r" in Ouster. If you are using a non-Velodyne lidar but it has a similar "ring" channel, you can change the PointXYZIR definition in utility.h and the corresponding code in imageProjection.cpp.
 
 For **KITTI** users, if you want to use our algorithm with  **HDL-64e**, you need to write your own implementation for such projection. If the point cloud is not projected properly, you will lose many points and performance.
 
