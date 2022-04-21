@@ -1,7 +1,7 @@
 # Lidar-Mapping-using-LeGO-LOAM-and-SC-LeGO-LOAM
 
 
-This repository contains code for a lightweight and ground optimized lidar odometry and mapping (LeGO-LOAM) and Scan context LeGO-LOAM system. The system takes in point cloud  from a Velodyne VLP-16 Lidar (palced horizontally) and optional IMU data as inputs. It outputs 6D pose estimation in real-time. 
+This repository contains code for a lightweight and ground optimized lidar odometry and mapping (LeGO-LOAM) and Scan context LeGO-LOAM system. The system takes in point cloud  from a Velodyne VLP-16 Lidar (placed horizontally) and optional IMU data as inputs. It outputs 6D pose estimation in real-time. 
 <!--
 [![Watch the video](/LeGO-LOAM/launch/demo32x.mp4)](
 
@@ -9,8 +9,14 @@ https://user-images.githubusercontent.com/97980444/164317160-3aa4f9b2-c125-40e7-
 
 )
 -->
+# LeGO LOAM
 <p align='center'>
     <img src="/LeGO-LOAM/launch/demo32x.gif" alt="drawing" width="800"/>
+</p>
+
+# SC LeGO LOAM
+<p align='center'>
+    <img src="/LeGO-LOAM/launch/demosc32x.gif" alt="drawing" width="800"/>
 </p>
 
 ## Lidar-inertial Odometry
@@ -56,7 +62,7 @@ When you compile the code for the first time, you need to add "-j1" behind "catk
 
 ## The system
 
-LeGO-LOAM is speficifally optimized for a horizontally placed VLP-16 on a ground vehicle. It assumes there is always a ground plane in the scan. The UGV we are using is Clearpath Jackal. It has a built-in IMU. 
+LeGO-LOAM is speficifally optimized for a horizontally placed VLP-16 on a ground vehicle. It assumes there is always a ground plane in the scan. The vechicle we are using is Northeastern's Autonomous Car NUANCE. It has a built in IMU. 
 
 <p align='center'>
     <img src="/LeGO-LOAM/launch/nuance.jpg" alt="drawing" width="400"/>
@@ -65,7 +71,7 @@ LeGO-LOAM is speficifally optimized for a horizontally placed VLP-16 on a ground
 The package performs segmentation before feature extraction.
 
 <p align='center'>
-    <img src="/LeGO-LOAM/launch/nuance.jpg" alt="drawing" width="400"/>
+    <img src="/LeGO-LOAM/launch/*.jpg" alt="drawing" width="400"/>
 </p>
 
 Lidar odometry performs two-step Levenberg Marquardt optimization to get 6D transformation.
@@ -75,8 +81,7 @@ Lidar odometry performs two-step Levenberg Marquardt optimization to get 6D tran
 </p>
 
 ## New Lidar
-
-The key thing to adapt the code to a new sensor is making sure the point cloud can be properly projected to an range image and ground can be correctly detected. For example, VLP-16 has a angular resolution of 0.2&deg; and 2&deg; along two directions. It has 16 beams. The angle of the bottom beam is -15&deg;. Thus, the parameters in "utility.h" are listed as below. When you implement new sensor, make sure that the ground_cloud has enough points for matching. Before you post any issues, please read this.
+The NUANCE car is equipped with three different Lidars. We chose Velodyne VLP-16 as it is calibrated with all the other sensors. Make sure before your collect the data you are using the correct address to collect data. The key thing to adapt the code to a new sensor is making sure the point cloud can be properly projected to an range image and ground can be correctly detected. For example, VLP-16 has a angular resolution of 0.2&deg; and 2&deg; along two directions. It has 16 beams. The angle of the bottom beam is -15&deg;. Thus, the parameters in "utility.h" are listed as below. When you implement new sensor, make sure that the ground_cloud has enough points for matching. Before you post any issues, please read this.
 
 ```
 extern const int N_SCAN = 16;
@@ -86,9 +91,18 @@ extern const float ang_res_y = 2.0;
 extern const float ang_bottom = 15.0;
 extern const int groundScanInd = 7;
 ```
+In case you are using Ouster OS1-64, Use the below configuration in the "utility.h" file and change lidar topic name accordingly. 
+Note:  // cloudHeader.stamp = ros::Time::now(); // Ouster lidar users may need to uncomment this line 
+```
+extern const int N_SCAN = 64;
+extern const int Horizon_SCAN = 1024;
+extern const float ang_res_x = 360.0/float(Horizon_SCAN);
+extern const float ang_res_y = 33.2/float(N_SCAN-1);
+extern const float ang_bottom = 16.6+0.1;
+extern const int groundScanInd = 15;
+```
 
-
-**New**: The existing LeGO-LOAM algorithm is tested on  a new **useCloudRing** flag has been added to help with point cloud projection (i.e., VLP-32C, VLS-128). Velodyne point cloud has "ring" channel that directly gives the point row id in a range image. Other lidars may have a same type of channel, i.e., "r" in Ouster. If you are using a non-Velodyne lidar but it has a similar "ring" channel, you can change the PointXYZIR definition in utility.h and the corresponding code in imageProjection.cpp.
+**New**: The existing LeGO-LOAM algorithm is tested on kinetic, melodic. We have tested the algorithm on ROS Noetic and modifed the code accordinly. A new **useCloudRing** flag has been added to help with point cloud projection (i.e., VLP-32C, VLS-128). Velodyne point cloud has "ring" channel that directly gives the point row id in a range image. Other lidars may have a same type of channel, i.e., "r" in Ouster. If you are using a non-Velodyne lidar but it has a similar "ring" channel, you can change the PointXYZIR definition in utility.h and the corresponding code in imageProjection.cpp.
 
 For **KITTI** users, if you want to use our algorithm with  **HDL-64e**, you need to write your own implementation for such projection. If the point cloud is not projected properly, you will lose many points and performance.
 
@@ -106,11 +120,11 @@ Notes: The parameter "/use_sim_time" is set to "true" for simulation, "false" to
 ```
 rosbag play *.bag --clock --topic /velodyne_points /imu/data
 ```
-Notes: Though /imu/data is optinal, it can improve estimation accuracy greatly if provided. Some sample bags can be downloaded from [here](https://github.com/RobustFieldAutonomyLab/jackal_dataset_20170608). 
+Notes: Though /imu/imu is optinal, it can improve estimation accuracy greatly if provided. 
 
 ## New data-set
 
-This dataset, [Custsom Northeastern Campus](), is captured using a Velodyne VLP-16, which is mounted on an UGV - Clearpath Jackal, on Stevens Institute of Technology campus. The VLP-16 rotation rate is set to 10Hz. This data-set features over 20K scans and many loop-closures. 
+This dataset, [Custsom Northeastern Campus](https://drive.google.com/file/d/11lYeENSYiwqLT3WJK8DymWcJKXYoiv-L/view?usp=sharing), is captured using a Velodyne VLP-16, which is mounted on Northeastern's Autonomous Vehicle NUANCE, on streets near Northeastern University campus. The VLP-16 rotation rate is set to 10Hz. This data-set features over 20K scans and many loop-closures. 
 
 <p align='center'>
     <img src="/LeGO-LOAM/launch/dataset-demo.gif" alt="drawing" width="600"/>
@@ -134,7 +148,8 @@ This dataset, [Custsom Northeastern Campus](), is captured using a Velodyne VLP-
 
 ## Loop Closure
 
-The loop-closure method implemented in this package is a naive ICP-based method. It often fails when the odometry drift is too large. For more advanced loop-closure methods, there is a package called [SC-LeGO-LOAM](https://github.com/irapkaist/SC-LeGO-LOAM), which features utilizing point cloud descriptor.
+The loop-closure method implemented in this package is a naive ICP-based method. It often fails when the odometry drift is too large. For this reason we have used more advanced loop-closure methods, Scan Context LeGO-LOAM, which features utilizing point cloud descriptor. To run this we need first remove current lego loam from the catkin_ws and add the SC-LeGO-LOAM in the src folder. Use catkin_make to make the files. This algorithm takes two inputs one is the query feature points and second is the existing map. The performance of this algorithm can be best visualised if there is alteast one loop closure. 
+
 
 ## Speed Optimization
 
