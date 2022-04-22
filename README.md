@@ -13,7 +13,9 @@ https://user-images.githubusercontent.com/97980444/164317160-3aa4f9b2-c125-40e7-
 <p align='center'>
     <img src="/LeGO-LOAM/launch/demo32x.gif" alt="drawing" width="800"/>
 </p>
-
+<p align='center'>
+    <img src="/LeGO-LOAM/launch/cam0_32x.gif" alt="drawing" width="800"/>
+</p>
 # SC LeGO LOAM
 <p align='center'>
     <img src="/LeGO-LOAM/launch/demosc32x.gif" alt="drawing" width="800"/>
