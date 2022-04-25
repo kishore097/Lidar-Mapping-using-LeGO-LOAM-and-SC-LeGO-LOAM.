@@ -8,19 +8,13 @@ https://user-images.githubusercontent.com/97980444/164317160-3aa4f9b2-c125-40e7-
 
 )
 -->
+
 # LeGO LOAM
 <p align='center'>
     <img src="/LeGO-LOAM/launch/demo32x.gif" alt="drawing" width="800"/>
-    <p align='left'>
-        <img src="/LeGO-LOAM/launch/cam0_32x.gif" alt="drawing" width="200"/>
-    </p>
 </p>
 <p align='center'>
     <img src="/LeGO-LOAM/launch/cam0_32x.gif" alt="drawing" width="800"/>
-</p>
-# SC LeGO LOAM
-<p align='center'>
-    <img src="/LeGO-LOAM/launch/demosc32x.gif" alt="drawing" width="800"/>
 </p>
 
 ## Dependency
@@ -85,7 +79,9 @@ extern const float ang_bottom = 15.0;
 extern const int groundScanInd = 7;
 ```
 In case you are using Ouster OS1-64, Use the below configuration in the "utility.h" file and change the lidar topic name accordingly. 
-Note:  ```//cloudHeader.stamp = ros::Time::now();``` // Ouster lidar users may need to uncomment this line 
+Note:  Ouster lidar users may need to uncomment this line
+```//cloudHeader.stamp = ros::Time::now();``` 
+
 ```
 extern const int N_SCAN = 64;
 extern const int Horizon_SCAN = 1024;
@@ -101,15 +97,20 @@ If you are using your lidar with an IMU, make sure your IMU is aligned properly 
 
 ## Run the package
 
+
+
 1. Run the launch file:
 ```
 roslaunch lego_loam run.launch
 ```
-Notes: The parameter "/use_sim_time" is set to "true" for simulation, "false" to real robot usage.
+
+Notes: 
+    1. While running the package make sure you have only one package of LeGO-LOAM or SC-LeGO-LOAM in the src folder.
+    2. The parameter "/use_sim_time" is set to "true" for simulation, "false" to real robot usage.
 
 2. Play existing bag files:
 ```
-rosbag play *.bag --clock --topic /ns1/velodyne_points /imu/imu
+rosbag play *.bag --clock --topic /ns1/velodyne_points /imu/imu /camera_array/cam0/camera_info /camera_array/cam0/image_raw 
 ```
 Notes: Though /imu/imu is optional, it can improve estimation accuracy greatly if provided. 
 
@@ -129,5 +130,16 @@ The loop-closure method implemented in this package is a naive ICP-based method.
   pages={4758-4765},
   year={2018},
   organization={IEEE}
+}
+```
+and *SC-LeGO-LOAM*
+```
+@INPROCEEDINGS { gkim-2018-iros,
+  author = {Kim, Giseop and Kim, Ayoung},
+  title = { Scan Context: Egocentric Spatial Descriptor for Place Recognition within {3D} Point Cloud Map },
+  booktitle = { Proceedings of the IEEE/RSJ International Conference on Intelligent Robots and Systems },
+  year = { 2018 },
+  month = { Oct. },
+  address = { Madrid }
 }
 ```
