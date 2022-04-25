@@ -1,0 +1,23 @@
+<launch>
+    
+    <!--- Sim Time -->
+    <param name="/use_sim_time" value="true" />
+
+    <!--- Run Rviz-->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find lego_loam)/launch/test.rviz" />
+
+    <!--- TF -->
+    <node pkg="tf" type="static_transform_publisher" name="camera_init_to_map"  args="0 0 0 1.570795   0        1.570795 /map    /camera_init 10" />
+    <node pkg="tf" type="static_transform_publisher" name="base_link_to_camera" args="0 0 0 -1.570795 -1.570795 0        /camera /base_link   10" />
+    rom cv_bridge import CvBridge
+   2 bridge = CvBridge()
+   3 cv_image = bridge.imgmsg_to_cv2(image_message, desired_encoding='passthrough')<node pkg="tf" type="static_transform_publisher" name="base_link_to_car_camera" args="1.5 0.66 1.25 -1.570795 0 -1.570795    /base_link /cam_0_optical_frame   10" />
+    <node pkg="tf" type="static_transform_publisher" name="base_link_to_imu" args="1.35 0.0 1.25 0.0 0.0 -3.142    /base_link /imu   10" />
+
+    <!--- LeGO-LOAM -->    
+    <node pkg="lego_loam" type="imageProjection"    name="imageProjection"    output="screen"/>
+    <node pkg="lego_loam" type="featureAssociation" name="featureAssociation" output="screen"/>
+    <node pkg="lego_loam" type="mapOptmization"     name="mapOptmization"     output="screen"/>
+    <node pkg="lego_loam" type="transformFusion"    name="transformFusion"    output="screen"/>
+
+</launch>
